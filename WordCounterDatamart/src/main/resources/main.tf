@@ -2,19 +2,16 @@ provider "aws" {
   region = "us-east-1" # Cambia a tu región preferida
 }
 
-# Generar clave SSH
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
-# Crear el par de claves en AWS
 resource "aws_key_pair" "my_key" {
   key_name   = "terraform-key"
   public_key = tls_private_key.ssh_key.public_key_openssh
 }
 
-# Grupo de seguridad para MongoDB
 resource "aws_security_group" "mongodb_sg" {
   name_prefix = "mongodb-sg"
 
@@ -40,7 +37,6 @@ resource "aws_security_group" "mongodb_sg" {
   }
 }
 
-# Instancia EC2
 resource "aws_instance" "mongodb_instance" {
   ami           = "ami-0c02fb55956c7d316" # Amazon Linux 2 AMI
   instance_type = "t2.micro"
@@ -53,7 +49,6 @@ resource "aws_instance" "mongodb_instance" {
     Name = "MongoDB-Server"
   }
 
-  # Script para instalar y configurar MongoDB
   user_data = <<-EOF
     #!/bin/bash
     # Actualizar paquetes
@@ -82,13 +77,16 @@ resource "aws_instance" "mongodb_instance" {
   EOF
 }
 
-# Output de la clave privada
 output "private_key" {
   value     = tls_private_key.ssh_key.private_key_pem
   sensitive = true
 }
 
-# Output de la IP pública de la instancia
 output "public_ip" {
   value = aws_instance.mongodb_instance.public_ip
+}
+
+resource "local_file" "public_ip_file" {
+  filename = "public_ip.txt"
+  content  = aws_instance.mongodb_instance.public_ip
 }

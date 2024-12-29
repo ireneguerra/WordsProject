@@ -18,13 +18,4 @@ public class Controller {
         bookCrawler.downloadBooks(startBookId, booksToDownload);
         System.out.println("Proceso de descarga completado.");
     }
-
-    public static void main(String[] args) {
-        Controller controller = new Controller();
-
-        int startBookId = 1;
-        int booksToDownload = 10;
-
-        controller.startDownloadProcess(startBookId, booksToDownload);
-    }
 }
