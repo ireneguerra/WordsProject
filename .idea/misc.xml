@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/DynamoDatamartFeeder/pom.xml" />
         <option value="$PROJECT_DIR$/WordCounterDatamart/pom.xml" />
         <option value="$PROJECT_DIR$/BookCrawler/pom.xml" />
+        <option value="$PROJECT_DIR$/WordsGraph/pom.xml" />
       </list>
     </option>
   </component>

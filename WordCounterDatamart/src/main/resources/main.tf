@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1" # Cambia a tu región preferida
+  region = "us-east-1"
 }
 
 resource "tls_private_key" "ssh_key" {

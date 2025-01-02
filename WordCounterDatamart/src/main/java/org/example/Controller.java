@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.datalake_reader.S3ClientProvider;
 import org.example.datalake_reader.S3Service;
+import org.example.datamart_storage.DatamartService;
 import org.example.datamart_storage.MongoService;
 import org.example.word_processing.WordCounter;
 import org.example.word_processing.WordProcessingService;
@@ -18,7 +19,7 @@ public class Controller {
 
         S3Service s3Service = new S3Service(s3Client);
         WordProcessingService wordProcessingService = new WordProcessingService(new WordProcessor(), new WordCounter());
-        MongoService mongoService = new MongoService();
+        DatamartService datamartService = new MongoService();
 
         String bucketName = "bucket-datalake-gutenberg-irene-raul";
 
@@ -36,9 +37,9 @@ public class Controller {
             }
         }
 
-        mongoService.insertOrUpdateWords(wordProcessingService.getGlobalWordCount());
+        datamartService.upsertWords(wordProcessingService.getGlobalWordCount());
 
-        mongoService.closeConnection();
+        datamartService.closeConnection();
 
         System.out.println("Todos los archivos fueron procesados y las palabras acumuladas.");
     }

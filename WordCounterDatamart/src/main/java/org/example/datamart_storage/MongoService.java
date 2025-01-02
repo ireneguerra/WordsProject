@@ -1,7 +1,7 @@
 package org.example.datamart_storage;
 import java.util.Map;
 
-public class MongoService {
+public class MongoService implements DatamartService {
     private final MongoDBConnection mongoDBConnection;
     private final DatamartFeeder datamartFeeder;
 
@@ -11,7 +11,7 @@ public class MongoService {
         this.datamartFeeder = new MongoDBFeeder(mongoDBConnection.getDatabase(), "word-counter");
     }
 
-    public void insertOrUpdateWords(Map<String, Integer> wordCount) {
+    public void upsertWords(Map<String, Integer> wordCount) {
         wordCount.forEach(datamartFeeder::upsertWord);
     }
 
