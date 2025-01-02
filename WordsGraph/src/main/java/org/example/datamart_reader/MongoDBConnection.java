@@ -1,4 +1,4 @@
-package org.example;
+package org.example.datamart_reader;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerAddress;

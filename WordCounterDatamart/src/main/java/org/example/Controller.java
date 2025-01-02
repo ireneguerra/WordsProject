@@ -21,7 +21,7 @@ public class Controller {
         WordProcessingService wordProcessingService = new WordProcessingService(new WordProcessor(), new WordCounter());
         DatamartService datamartService = new MongoService();
 
-        String bucketName = "bucket-datalake-gutenberg-irene-raul";
+        String bucketName = "bucket-datalake-gutenberg-books";
 
         List<S3Object> files = s3Service.listFiles(bucketName);
 

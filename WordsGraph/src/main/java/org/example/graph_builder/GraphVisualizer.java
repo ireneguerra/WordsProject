@@ -1,4 +1,4 @@
-package org.example;
+package org.example.graph_builder;
 
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.swing.mxGraphComponent;

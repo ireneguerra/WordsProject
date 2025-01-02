@@ -1,4 +1,4 @@
-package org.example;
+package org.example.datamart_reader;
 
 import java.util.Map;
 

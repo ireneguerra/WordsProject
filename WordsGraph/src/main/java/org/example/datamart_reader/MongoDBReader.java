@@ -1,4 +1,4 @@
-package org.example;
+package org.example.datamart_reader;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;

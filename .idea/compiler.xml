@@ -8,10 +8,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="WordsGraph" />
         <module name="gutenberg" />
-        <module name="BookCrawler" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="APIGraph" target="11" />
       <module name="WordCounterDatamart" target="18" />
       <module name="WordsProject" target="18" />
     </bytecodeTargetLevel>

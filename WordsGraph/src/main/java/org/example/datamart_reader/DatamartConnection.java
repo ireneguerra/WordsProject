@@ -1,4 +1,4 @@
-package org.example;
+package org.example.datamart_reader;
 
 public interface DatamartConnection {
     void connect();
