@@ -1,7 +1,21 @@
-provider "aws" {
-  region = "us-east-1"
+# Definir el valor local
+locals {
+  bucket_name = "bucket-datalake-gutenberg-books"
 }
 
-resource "aws_s3_bucket" "mi_bucket" {
-  bucket = "bucket-datalake-gutenberg-irene-raul"
+resource "null_resource" "create_bucket_and_upload" {
+  provisioner "local-exec" {
+    interpreter = ["powershell", "-Command"]
+    command = <<EOT
+      $BucketName = "${local.bucket_name}"
+      if (aws s3api head-bucket --bucket $BucketName 2>$null) {
+        Write-Output "El bucket $BucketName ya existe. Eliminando contenido..."
+        aws s3 rm "s3://$BucketName" --recursive
+        Write-Output "Eliminando el bucket $BucketName..."
+        aws s3api delete-bucket --bucket $BucketName --region us-east-1
+      }
+      Write-Output "Creando el bucket $BucketName..."
+      aws s3api create-bucket --bucket $BucketName --region us-east-1
+    EOT
+  }
 }

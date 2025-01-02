@@ -6,12 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="APIGraph" />
+        <module name="BookCrawler" />
         <module name="WordsGraph" />
         <module name="gutenberg" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="APIGraph" target="11" />
+      <module name="APIWordsGraph" target="20" />
       <module name="WordCounterDatamart" target="18" />
       <module name="WordsProject" target="18" />
     </bytecodeTargetLevel>

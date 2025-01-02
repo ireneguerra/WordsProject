@@ -15,7 +15,7 @@ import java.net.URL;
 public class S3DatalakeFeeder implements DatalakeFeeder {
 
     private final S3Client s3;
-    private static final String BUCKET_NAME = "bucket-datalake-gutenberg-irene-raul";
+    private static final String BUCKET_NAME = "bucket-datalake-gutenberg-books";
 
     public S3DatalakeFeeder() {
         this.s3 = S3Client.builder()

@@ -10,10 +10,13 @@
         <option value="$PROJECT_DIR$/WordCounterDatamart/pom.xml" />
         <option value="$PROJECT_DIR$/BookCrawler/pom.xml" />
         <option value="$PROJECT_DIR$/WordsGraph/pom.xml" />
+        <option value="$PROJECT_DIR$/APIGraph/pom.xml" />
+        <option value="$PROJECT_DIR$/APIWordsGraph/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/APIWordsGraph/pom.xml" />
         <option value="$PROJECT_DIR$/BookCrawler/src/main/java/org/example/APIGraph/pom.xml" />
       </set>
     </option>
