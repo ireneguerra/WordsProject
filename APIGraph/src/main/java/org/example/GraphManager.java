@@ -5,7 +5,7 @@ import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class GraphManager {
-    private Graph<String, DefaultWeightedEdge> graph;
+    private final Graph<String, DefaultWeightedEdge> graph;
 
     public GraphManager() {
         this.graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
@@ -25,6 +25,6 @@ public class GraphManager {
     }
 
     public Graph<String, DefaultWeightedEdge> getGraph() {
-        return this.graph;
+        return graph;
     }
 }

@@ -1,5 +1,5 @@
 package org.example;
 
 public interface ClientManager {
-    String getFileContent(String fileName);
+    String getFileContent(String bucketName, String fileName);
 }

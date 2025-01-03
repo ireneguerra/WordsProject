@@ -11,7 +11,6 @@ public class GraphData {
         private String target;
         private double weight;
 
-        // Getters y Setters
         public String getSource() {
             return source;
         }

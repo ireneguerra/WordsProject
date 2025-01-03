@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 public class S3ClientManager implements ClientManager {
     private final S3Client s3;
-    private static final String BUCKET_NAME = "bucket-words-graphs";
 
     public S3ClientManager() {
         this.s3 = S3Client.builder()
@@ -23,10 +22,10 @@ public class S3ClientManager implements ClientManager {
 
     }
 
-    public String getFileContent(String fileName)  {
+    public String getFileContent(String bucketName, String fileName)  {
         try {
             GetObjectRequest request = GetObjectRequest.builder()
-                    .bucket(BUCKET_NAME)
+                    .bucket(bucketName)
                     .key(fileName)
                     .build();
 

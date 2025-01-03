@@ -6,7 +6,7 @@ public class Main {
         Controller controller = new Controller();
 
         int startBookId = 1;
-        int booksToDownload = 10;
+        int booksToDownload = 50;
 
         controller.startDownloadProcess(startBookId, booksToDownload);
     }
