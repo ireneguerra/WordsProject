@@ -1,9 +1,9 @@
 # Definir el valor local
 locals {
-  bucket_name = "bucket-words-graphs"
+  bucket_name = "csv-bucket-neo4j" # Cambia este nombre al que desees
 }
 
-resource "null_resource" "create_graph_bucket" {
+resource "null_resource" "create_bucket_and_upload" {
   provisioner "local-exec" {
     interpreter = ["powershell", "-Command"]
     command = <<EOT
@@ -16,6 +16,27 @@ resource "null_resource" "create_graph_bucket" {
       }
       Write-Output "Creando el bucket $BucketName..."
       aws s3api create-bucket --bucket $BucketName --region us-east-1
+
+      # Configurar el bucket para que sea público
+      Write-Output "Haciendo público el bucket $BucketName..."
+      aws s3api put-bucket-acl --bucket $BucketName --acl public-read
+
+      # Configurar una política de bucket para hacerlo público
+      $BucketPolicy = @"
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::$BucketName/*"
+        }
+    ]
+}
+"@
+      Write-Output "Estableciendo política pública para el bucket $BucketName..."
+      aws s3api put-bucket-policy --bucket $BucketName --policy $BucketPolicy
     EOT
   }
 }
