@@ -1,14 +1,12 @@
 package org.example;
 
 public class Main {
-
     public static void main(String[] args) {
         Controller controller = new Controller();
-
-        int startBookId = 1;
+        int startRange = 1;
+        int endRange = 1000;
         int booksToDownload = 50;
 
-        controller.startDownloadProcess(startBookId, booksToDownload);
+        controller.startDownloadProcess(startRange, endRange, booksToDownload);
     }
 }
-

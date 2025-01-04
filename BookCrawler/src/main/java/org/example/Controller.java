@@ -13,9 +13,10 @@ public class Controller {
         this.bookCrawler = new GutenbergCrawler(datalakeFeeder);
     }
 
-    public void startDownloadProcess(int startBookId, int booksToDownload) {
+    public void startDownloadProcess(int startRange, int endRange, int booksToDownload) {
         System.out.println("Iniciando el proceso de descarga de libros...");
-        bookCrawler.downloadBooks(startBookId, booksToDownload);
+        bookCrawler.downloadBooks(startRange, endRange, booksToDownload);
         System.out.println("Proceso de descarga completado.");
     }
+
 }
