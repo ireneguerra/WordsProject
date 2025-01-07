@@ -28,7 +28,7 @@ public class Controller {
         S3Client s3Client = s3ClientProvider.createS3Client();
         S3Service s3Service = new S3Service(s3Client);
 
-        String bucketName = "bucket-datalake-books";
+        String bucketName = "datalake-gutenberg-books";
         String sourceFolder = "libros_sin_procesar/";
         String destinationFolder = "libros_procesados/";
 

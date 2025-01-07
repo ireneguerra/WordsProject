@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class S3DatalakeFeeder implements DatalakeFeeder {
 
     private final S3Client s3;
-    private static final String BUCKET_NAME = "bucket-datalake-books";
+    private static final String BUCKET_NAME = "datalake-gutenberg-books";
     private static final String PROCESSED_FOLDER = "libros_procesados/";
     private static final String UNPROCESSED_FOLDER = "libros_sin_procesar/";
 

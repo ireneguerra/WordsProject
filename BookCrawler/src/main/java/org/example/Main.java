@@ -5,7 +5,7 @@ public class Main {
         Controller controller = new Controller();
         int startRange = 1;
         int endRange = 1000;
-        int booksToDownload = 50;
+        int booksToDownload = 5;
 
         controller.startDownloadProcess(startRange, endRange, booksToDownload);
     }

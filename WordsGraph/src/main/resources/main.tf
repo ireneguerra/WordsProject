@@ -1,4 +1,4 @@
-# Definir el valor local
+
 locals {
   bucket_name = "bucket-words-graphs"
 }
