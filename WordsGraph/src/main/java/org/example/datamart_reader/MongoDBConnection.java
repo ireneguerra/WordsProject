@@ -19,7 +19,7 @@ public class MongoDBConnection implements DatamartConnection {
     private MongoDatabase database;
 
     public void connect() {
-        String bucketName = "raluraluraluralu";
+        String bucketName = "public-ip-mongo-bucket";
         String key = "public_ip.txt";
         String host = readHostFromS3(bucketName, key);
         int port = 27017;

@@ -1,5 +1,5 @@
 locals {
-  bucket_name = "raluraluraluralu"
+  bucket_name = "public-ip-mongo-bucket"
 }
 
 resource "null_resource" "create_bucket_and_upload" {
@@ -30,7 +30,7 @@ resource "tls_private_key" "ssh_key" {
 }
 
 resource "aws_key_pair" "my_key" {
-  key_name   = "terraform-mongo-keey-ini-ralu"
+  key_name   = "terraform-mongo-key"
   public_key = tls_private_key.ssh_key.public_key_openssh
 }
 
