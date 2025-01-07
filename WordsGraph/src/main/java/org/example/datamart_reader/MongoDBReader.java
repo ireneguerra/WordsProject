@@ -26,7 +26,7 @@ public class MongoDBReader implements DatamartReader {
         FindIterable<Document> documents = collection.find();
 
         for (Document document : documents) {
-            String word = document.getString("word");
+            String word = document.get("_id").toString();
             Integer weight = document.getInteger("count");
             if (word != null && weight != null) {
                 wordWeights.put(word, weight);

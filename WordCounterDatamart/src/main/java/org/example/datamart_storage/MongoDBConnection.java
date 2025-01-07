@@ -5,6 +5,9 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -50,6 +53,10 @@ public class MongoDBConnection implements DatamartConnection {
             throw new IllegalStateException("Debes llamar al método connect() antes de obtener la base de datos.");
         }
         return database;
+    }
+
+    public MongoCollection<Document> getCollection(String collectionName) {
+        return database.getCollection(collectionName);
     }
 
     public void close() {

@@ -2,7 +2,7 @@ package org.example;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.example.graph_service.GraphService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,13 +23,14 @@ public class GraphApiController {
         return "Camino más corto: " + graphService.getShortestPath(source, target);
     }
 
-    @Operation(summary = "Obtener todos los caminos entre dos nodos",
-            description = "Devuelve todas las rutas posibles desde el nodo fuente al nodo destino.")
+    @Operation(summary = "Obtener todos los caminos entre dos nodos dada una máxima profundidad",
+            description = "Devuelve todas las rutas posibles desde el nodo fuente al nodo destino dada una máxima profundidad.")
     @GetMapping("/all-paths")
     public String getAllPaths(
             @Parameter(description = "Nodo fuente") @RequestParam String source,
-            @Parameter(description = "Nodo destino") @RequestParam String target) {
-        return "Todos los caminos: " + graphService.getAllPaths(source, target);
+            @Parameter(description = "Nodo destino") @RequestParam String target,
+            @Parameter(description = "Número máximo de profundidad") @RequestParam int maxDepth)  {
+        return "Todos los caminos: " + graphService.getAllPaths(source, target, maxDepth);
     }
 
     @Operation(summary = "Obtener nodos aislados", description = "Devuelve los nodos que no tienen conexiones.")
@@ -38,23 +39,15 @@ public class GraphApiController {
         return "Nodos aislados: " + graphService.getIsolatedNodes();
     }
 
-    @Operation(summary = "Obtener caminos limitados entre dos nodos",
-            description = "Devuelve un número limitado de caminos desde el nodo fuente al nodo destino.")
-    @GetMapping("/limited-paths")
-    public String getLimitedPaths(
-            @Parameter(description = "Nodo fuente") @RequestParam String source,
-            @Parameter(description = "Nodo destino") @RequestParam String target,
-            @Parameter(description = "Número máximo de caminos") @RequestParam int k) {
-        return "Caminos limitados: " + graphService.getLimitedPaths(source, target, k);
-    }
 
-    @Operation(summary = "Obtener el camino más largo entre dos nodos",
-            description = "Calcula el camino más largo entre dos nodos en un grafo.")
+    @Operation(summary = "Obtener el camino más largo entre dos nodos con una profundidad máxima",
+            description = "Calcula el camino más largo entre dos nodos en un grafo con una profundidad máxima.")
     @GetMapping("/longest-path")
     public String getLongestPath(
             @Parameter(description = "Nodo fuente") @RequestParam String source,
-            @Parameter(description = "Nodo destino") @RequestParam String target) {
-        return "Camino más largo: " + graphService.getLongestPath(source, target);
+            @Parameter(description = "Nodo destino") @RequestParam String target,
+            @Parameter(description = "Número máximo de profundidad") @RequestParam int maxDepth) {
+        return "Camino más largo: " + graphService.getLongestPath(source, target, maxDepth);
     }
 
     @Operation(summary = "Identificar clusters", description = "Devuelve los clusters en el grafo.")

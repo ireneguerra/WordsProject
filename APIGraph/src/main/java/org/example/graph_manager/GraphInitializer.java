@@ -1,5 +1,6 @@
-package org.example;
+package org.example.graph_manager;
 
+import org.example.graph_service.GraphService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;

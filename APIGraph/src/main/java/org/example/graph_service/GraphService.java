@@ -1,6 +1,9 @@
-package org.example;
+package org.example.graph_service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.graph_manager.GraphManager;
+import org.example.client_manager.S3ClientManager;
+import org.example.graph.GraphData;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,20 +24,16 @@ public class GraphService {
         return String.valueOf(graphQueries.shortestPath(source, target));
     }
 
-    public String getAllPaths(String source, String target) {
-        return String.valueOf(graphQueries.allPaths(source, target));
-    }
-
     public String getIsolatedNodes() {
         return String.valueOf(graphQueries.isolatedNodes());
     }
 
-    public String getLimitedPaths(String source, String target, int k) {
-        return String.valueOf(graphQueries.limitedPaths(source, target, k));
+    public String getAllPaths(String source, String target, int maxDepth) {
+        return String.valueOf(graphQueries.allPaths(source, target, maxDepth));
     }
 
-    public String getLongestPath(String source, String target) {
-        return String.valueOf(graphQueries.longestPath(source, target));
+    public String getLongestPath(String source, String target, int maxDepth) {
+        return String.valueOf(graphQueries.longestPath(source, target, maxDepth));
     }
 
     public String getIdentifyClusters() {

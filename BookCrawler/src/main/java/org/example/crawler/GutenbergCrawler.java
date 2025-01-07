@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class GutenbergCrawler implements BookCrawler {
 
-    private static final int DOWNLOAD_DELAY_MS = 2000; // Tiempo de espera entre descargas
+    private static final int DOWNLOAD_DELAY_MS = 2000;
     private final DatalakeFeeder datalakeFeeder;
 
     public GutenbergCrawler(DatalakeFeeder datalakeFeeder) {
@@ -22,13 +22,12 @@ public class GutenbergCrawler implements BookCrawler {
         Random random = new Random();
         HashSet<Integer> bookIds = new HashSet<>();
 
-        // Generar IDs únicos aleatorios dentro del rango especificado
         while (bookIds.size() < booksToDownload) {
             int randomBookId = random.nextInt(endRange - startRange + 1) + startRange;
             bookIds.add(randomBookId);
         }
 
-        // Descargar los libros con los IDs generados
+
         for (int bookId : bookIds) {
             try {
                 String downloadUrl = buildBookDownloadUrl(bookId);

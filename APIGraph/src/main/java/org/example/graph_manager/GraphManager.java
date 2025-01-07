@@ -1,5 +1,6 @@
-package org.example;
+package org.example.graph_manager;
 
+import org.example.graph.GraphData;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;

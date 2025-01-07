@@ -13,10 +13,30 @@ public class MongoDBFeeder implements DatamartFeeder {
     public MongoDBFeeder(MongoDatabase database, String collectionName) {
         this.collection = database.getCollection(collectionName);
     }
+    public void insertWord(String word, int count) {
+        try {
+            // Inserta un documento con _id igual a word
+            var doc = new Document("_id", word).append("count", count);
+            collection.insertOne(doc);
+            System.out.println("Palabra insertada: " + word + " con count: " + count);
+        } catch (Exception e) {
+            System.err.println("Error al insertar la palabra: " + word + ". Puede que ya exista un documento con ese _id.");
+        }
+    }
+
     public void upsertWord(String word, int count) {
-        var filter = Filters.eq("word", word);
-        var update = Updates.set("count", count);
-        collection.updateOne(filter, update, new UpdateOptions().upsert(true));
-        System.out.println("Palabra actualizada o insertada: " + word + " con count: " + count);
+        var filter = new Document("_id", word);
+
+        // Incrementa el valor de "count" o crea un nuevo documento si no existe
+        var update = Updates.inc("count", count);
+
+        // Configura la opción de upsert como true
+        var result = collection.updateOne(filter, update, new UpdateOptions().upsert(true));
+
+        if (result.getMatchedCount() > 0) {
+            System.out.println("Palabra actualizada: " + word + " con incremento en count: " + count);
+        } else {
+            System.out.println("Nuevo documento insertado: " + word + " con count: " + count);
+        }
     }
 }

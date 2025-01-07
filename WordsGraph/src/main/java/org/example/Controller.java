@@ -3,7 +3,6 @@ package org.example;
 import org.example.datamart_reader.DatamartReader;
 import org.example.datamart_reader.MongoDBReader;
 import org.example.graph_builder.GraphBuilder;
-import org.example.graph_builder.GraphVisualizer;
 import org.example.graph_builder.JGraphTBuilder;
 import org.example.graph_to_json.GraphToJson;
 import org.example.graph_to_json.JGraphTToJson;
@@ -33,6 +32,7 @@ public class Controller {
         String graphJson = buildGraphToJson(graph);
         System.out.println(graphJson);
         saveGraph(graphJson);
+        close();
     }
 
     private Graph<String, DefaultWeightedEdge> buildGraph() {
@@ -40,8 +40,6 @@ public class Controller {
 
         JGraphTBuilder graphBuilder = new JGraphTBuilder(wordWeights);
         Graph<String, DefaultWeightedEdge> graph = graphBuilder.buildGraph();
-
-        GraphVisualizer.visualize(graph);
 
         System.out.println("Nodos del grafo: " + graph.vertexSet());
         for (DefaultWeightedEdge edge : graph.edgeSet()) {

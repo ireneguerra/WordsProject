@@ -1,6 +1,6 @@
 # Definir el valor local
 locals {
-  bucket_name = "bucket-datalake-gutenberg-books"
+  bucket_name = "bucket-datalake-books"
 }
 
 resource "null_resource" "create_bucket_and_upload" {

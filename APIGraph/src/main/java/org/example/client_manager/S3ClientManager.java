@@ -1,4 +1,4 @@
-package org.example;
+package org.example.client_manager;
 
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
