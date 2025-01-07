@@ -15,11 +15,9 @@ public class WordProcessingService {
     }
 
     public void processFile(String content) {
-        // Procesar y contar palabras en el archivo
         String[] processedWords = wordProcessor.processContent(content);
         Map<String, Integer> fileWordCount = wordCounter.countWords(processedWords, wordProcessor);
 
-        // Acumular los conteos en el mapa global
         fileWordCount.forEach((word, count) ->
                 globalWordCount.merge(word, count, Integer::sum)
         );

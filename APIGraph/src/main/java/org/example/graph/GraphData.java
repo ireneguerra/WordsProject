@@ -36,7 +36,6 @@ public class GraphData {
         }
     }
 
-    // Getters y Setters
     public List<String> getVertices() {
         return vertices;
     }

@@ -37,7 +37,7 @@ public class GutenbergCrawler implements BookCrawler {
                 } else {
                     System.out.println("No se encontró archivo de texto para el libro ID: " + bookId);
                 }
-                Thread.sleep(DOWNLOAD_DELAY_MS); // Esperar antes de la siguiente descarga
+                Thread.sleep(DOWNLOAD_DELAY_MS);
             } catch (Exception e) {
                 System.out.println("Error al descargar el libro ID: " + bookId + " - " + e.getMessage());
             }

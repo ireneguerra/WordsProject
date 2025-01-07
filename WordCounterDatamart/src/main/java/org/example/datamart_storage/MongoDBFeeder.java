@@ -15,7 +15,6 @@ public class MongoDBFeeder implements DatamartFeeder {
     }
     public void insertWord(String word, int count) {
         try {
-            // Inserta un documento con _id igual a word
             var doc = new Document("_id", word).append("count", count);
             collection.insertOne(doc);
             System.out.println("Palabra insertada: " + word + " con count: " + count);
@@ -27,10 +26,8 @@ public class MongoDBFeeder implements DatamartFeeder {
     public void upsertWord(String word, int count) {
         var filter = new Document("_id", word);
 
-        // Incrementa el valor de "count" o crea un nuevo documento si no existe
         var update = Updates.inc("count", count);
 
-        // Configura la opción de upsert como true
         var result = collection.updateOne(filter, update, new UpdateOptions().upsert(true));
 
         if (result.getMatchedCount() > 0) {

@@ -5,10 +5,12 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import java.util.Collections;
 
 public class MongoDBConnection implements DatamartConnection {
@@ -17,11 +19,13 @@ public class MongoDBConnection implements DatamartConnection {
     private MongoDatabase database;
 
     public void connect() {
-        String host = readHostFromFile("WordCounterDatamart/src/main/resources/public_ip.txt");
+        String bucketName = "raluraluraluralu";
+        String key = "public_ip.txt";
+        String host = readHostFromS3(bucketName, key);
         int port = 27017;
 
         if (host == null || host.isEmpty()) {
-            throw new IllegalStateException("No se pudo leer la IP pública del archivo.");
+            throw new IllegalStateException("No se pudo leer la IP pública del bucket.");
         }
 
         MongoClientSettings settings = MongoClientSettings.builder()
@@ -35,20 +39,34 @@ public class MongoDBConnection implements DatamartConnection {
         System.out.println("Conexión a MongoDB establecida con éxito.");
     }
 
-    private String readHostFromFile(String filePath) {
-        try {
-            return Files.readString(Paths.get(filePath)).trim();
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo de IP pública: " + e.getMessage());
-            return null;
+    private String readHostFromS3(String bucketName, String key) {
+        try (S3Client s3Client = S3Client.builder()
+                .region(Region.US_EAST_1)
+                .credentialsProvider(DefaultCredentialsProvider.create())
+                .build()) {
+
+            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build();
+
+            byte[] fileBytes = s3Client.getObjectAsBytes(getObjectRequest).asByteArray();
+
+            return new String(fileBytes).trim();
+
         }
     }
+
 
     public MongoDatabase getDatabase() {
         if (database == null) {
             throw new IllegalStateException("Debes llamar al método connect() antes de obtener la base de datos.");
         }
         return database;
+    }
+
+    public MongoCollection<Document> getCollection(String collectionName) {
+        return database.getCollection(collectionName);
     }
 
     public void close() {

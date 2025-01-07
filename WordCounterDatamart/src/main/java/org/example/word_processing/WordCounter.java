@@ -13,7 +13,6 @@ public class WordCounter {
                 wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
             }
         }
-
         return wordCount;
     }
 }

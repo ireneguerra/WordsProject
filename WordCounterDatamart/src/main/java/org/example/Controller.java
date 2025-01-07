@@ -45,16 +45,12 @@ public class Controller {
             System.out.println("Procesando archivo: " + sourceKey);
 
             try {
-                // Leer el contenido del archivo
                 String content = s3Service.getFileContent(bucketName, sourceKey);
 
-                // Procesar el contenido
                 wordProcessingService.processFile(content);
 
-                // Guardar el archivo procesado en la carpeta libros_procesados
                 s3Service.saveFile(bucketName, destinationKey, content);
 
-                // Eliminar el archivo original de libros_sin_procesar
                 s3Client.deleteObject(DeleteObjectRequest.builder()
                         .bucket(bucketName)
                         .key(sourceKey)

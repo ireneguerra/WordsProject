@@ -22,7 +22,7 @@ public class MongoDBReader implements DatamartReader {
         MongoDatabase database = mongoDBConnection.getDatabase();
         MongoCollection<Document> collection = database.getCollection("word-counter");
 
-        // Leer los documentos de la colección
+
         FindIterable<Document> documents = collection.find();
 
         for (Document document : documents) {
