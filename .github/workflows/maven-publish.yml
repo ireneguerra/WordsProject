@@ -1,7 +1,7 @@
 name: Execute Terraform and Java Classes
 
 on:
-  workflow_dispatch: # Permite disparar el workflow manualmente
+  workflow_dispatch:
     inputs:
       AWS_ACCESS_KEY_ID:
         description: "AWS Access Key ID"
@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. Configurar Credenciales AWS con el Token de Sesión
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
@@ -26,38 +27,41 @@ jobs:
         aws-session-token: ${{ github.event.inputs.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
 
+    # 2. Ejecutar Terraform (init, plan y apply) en la carpeta terraforms
     - name: Terraform Init
-      working-directory: ./terraforms
+      working-directory: terraforms
       run: terraform init
 
     - name: Terraform Plan
-      working-directory: ./terraforms
+      working-directory: terraforms
       run: terraform plan
 
     - name: Terraform Apply
-      working-directory: ./terraforms
+      working-directory: terraforms
       run: terraform apply -auto-approve
 
+    # 3. Ejecutar módulos Java...
+
     - name: Run BookCrawler Java Module
-      working-directory: ./BookCrawler
+      working-directory: BookCrawler
       run: |
         mvn clean install
         mvn exec:java
 
     - name: Run WordCounterDatamart Java Module
-      working-directory: ./WordCounterDatamart
+      working-directory: WordCounterDatamart
       run: |
         mvn clean install
         mvn exec:java
 
     - name: Run WordsGraph Java Module
-      working-directory: ./WordsGraph
+      working-directory: WordsGraph
       run: |
         mvn clean install
         mvn exec:java
-  
+
     - name: Run APIGraph Java Module
-      working-directory: ./APIGraph
+      working-directory: APIGraph
       run: |
         mvn clean install
         mvn exec:java
