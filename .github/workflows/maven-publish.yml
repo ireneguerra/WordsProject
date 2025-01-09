@@ -67,7 +67,7 @@ jobs:
 
     - name: Execute BookCrawler Java Module
       working-directory: BookCrawler
-      run: mvn exec:java -Dexec.mainClass="org.example.Main"
+      run: mvn exec:java -Dexec.mainClass="org.example.Main" -X
 
     # WordCounterDatamart Module
     - name: Install WordCounterDatamart Java Module
@@ -76,7 +76,7 @@ jobs:
 
     - name: Execute WordCounterDatamart Java Module
       working-directory: WordCounterDatamart
-      run: mvn exec:java -Dexec.mainClass="org.example.WordCounterMain"
+      run: mvn exec:java -Dexec.mainClass="org.example.WordCounterMain" -X
 
     # WordsGraph Module
     - name: Install WordsGraph Java Module
@@ -85,7 +85,7 @@ jobs:
 
     - name: Execute WordsGraph Java Module
       working-directory: WordsGraph
-      run: mvn exec:java -Dexec.mainClass="org.example.WordsGraphMain"
+      run: mvn exec:java -Dexec.mainClass="org.example.WordsGraphMain" -X
 
     # APIGraph Module
     - name: Install APIGraph Java Module
@@ -94,4 +94,4 @@ jobs:
 
     - name: Execute APIGraph Java Module
       working-directory: APIGraph
-      run: mvn exec:java -Dexec.mainClass="org.example.APIGraphMain"
+      run: mvn exec:java -Dexec.mainClass="org.example.APIGraphMain" -X
