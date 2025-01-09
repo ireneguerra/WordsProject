@@ -24,13 +24,15 @@ jobs:
 
     # 2. Instalar Terraform
     - name: Install Terraform
-      shell: pwsh  # Usar PowerShell
+      shell: pwsh
       run: |
         Write-Host "Instalando Terraform..."
         Invoke-WebRequest -Uri https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_windows_amd64.zip -OutFile terraform.zip
         Expand-Archive -Path terraform.zip -DestinationPath $env:USERPROFILE\terraform
-        $env:PATH += ";$env:USERPROFILE\terraform"
+        Write-Host "Agregando Terraform al PATH..."
+        [System.Environment]::SetEnvironmentVariable("PATH", $env:USERPROFILE\terraform + ";" + $env:PATH, [System.EnvironmentVariableTarget]::Process)
         Write-Host "Verificando instalación de Terraform..."
+        $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::Process)
         terraform version
 
     # 3. Configurar Credenciales AWS con el Token de Sesión
@@ -44,7 +46,7 @@ jobs:
 
     # 4. Ejecutar Terraform en la carpeta "terraforms"
     - name: Terraform Init
-      shell: pwsh  # Usar PowerShell
+      shell: pwsh
       working-directory: terraforms
       run: terraform init
 
