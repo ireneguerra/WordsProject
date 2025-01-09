@@ -15,7 +15,7 @@ on:
 
 jobs:
   execute-workflow:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # Usar Windows porque Terraform se ejecuta en PowerShell
 
     steps:
     # 1. Configurar Credenciales AWS con el Token de Sesión
@@ -27,41 +27,49 @@ jobs:
         aws-session-token: ${{ github.event.inputs.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
 
-    # 2. Ejecutar Terraform (init, plan y apply) en la carpeta terraforms
+    # 2. Ejecutar Terraform en la carpeta "terraforms"
     - name: Terraform Init
-      working-directory: WordsProject/terraforms
+      shell: pwsh  # Usar PowerShell en Windows
+      working-directory: terraforms  # Sin duplicación de rutas
       run: terraform init
 
     - name: Terraform Plan
-      working-directory: WordsProject/terraforms
+      shell: pwsh
+      working-directory: terraforms
       run: terraform plan
 
     - name: Terraform Apply
-      working-directory: WordsProject/terraforms
+      shell: pwsh
+      working-directory: terraforms
       run: terraform apply -auto-approve
 
     # 3. Ejecutar módulos Java...
 
     - name: Run BookCrawler Java Module
-      working-directory: WordsProject/BookCrawler
+      shell: pwsh
+      working-directory: BookCrawler
       run: |
         mvn clean install
         mvn exec:java
 
     - name: Run WordCounterDatamart Java Module
-      working-directory: WordsProject/WordCounterDatamart
+      shell: pwsh
+      working-directory: WordCounterDatamart
       run: |
         mvn clean install
         mvn exec:java
 
     - name: Run WordsGraph Java Module
-      working-directory: WordsProject/WordsGraph
+      shell: pwsh
+      working-directory: WordsGraph
       run: |
         mvn clean install
         mvn exec:java
 
     - name: Run APIGraph Java Module
-      working-directory: WordsProject/APIGraph
+      shell: pwsh
+      working-directory: APIGraph
       run: |
         mvn clean install
         mvn exec:java
+
