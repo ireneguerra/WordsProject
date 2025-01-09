@@ -22,21 +22,14 @@
             
             <!-- Plugin para ejecutar la clase principal -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.5.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>org.example.Main</mainClass>
-                </configuration>
+                     <groupId>org.codehaus.mojo</groupId>
+                     <artifactId>exec-maven-plugin</artifactId>
+                     <version>3.5.0</version>
+                     <configuration>
+                         <mainClass>org.example.Main</mainClass>
+                     </configuration>
             </plugin>
-        </plugins>
+         </plugins>
     </build>
 
     <properties>
