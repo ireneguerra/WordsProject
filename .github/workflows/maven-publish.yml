@@ -18,7 +18,18 @@ jobs:
     runs-on: windows-latest  # Usar Windows porque Terraform se ejecuta en PowerShell
 
     steps:
-    # 1. Configurar Credenciales AWS con el Token de Sesión
+    # 1. Clonar el Repositorio
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. Verificar la Ubicación del Repositorio
+    - name: Verificar estructura de directorios
+      shell: pwsh
+      run: |
+        Write-Host "Listando directorios en la ubicación actual:"
+        Get-ChildItem -Path . -Recurse
+
+    # 3. Configurar Credenciales AWS con el Token de Sesión
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
@@ -27,49 +38,48 @@ jobs:
         aws-session-token: ${{ github.event.inputs.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
 
-    # 2. Ejecutar Terraform en la carpeta "terraforms"
+    # 4. Ejecutar Terraform en la carpeta "terraforms"
     - name: Terraform Init
-      shell: pwsh  # Usar PowerShell en Windows
-      working-directory: terraforms  # Sin duplicación de rutas
+      shell: pwsh  # Usar PowerShell
+      working-directory: ./terraforms  # Ruta relativa desde el directorio clonado
       run: terraform init
 
     - name: Terraform Plan
       shell: pwsh
-      working-directory: terraforms
+      working-directory: ./terraforms
       run: terraform plan
 
     - name: Terraform Apply
       shell: pwsh
-      working-directory: terraforms
+      working-directory: ./terraforms
       run: terraform apply -auto-approve
 
-    # 3. Ejecutar módulos Java...
+    # 5. Ejecutar módulos Java...
 
     - name: Run BookCrawler Java Module
       shell: pwsh
-      working-directory: BookCrawler
+      working-directory: ./BookCrawler
       run: |
         mvn clean install
         mvn exec:java
 
     - name: Run WordCounterDatamart Java Module
       shell: pwsh
-      working-directory: WordCounterDatamart
+      working-directory: ./WordCounterDatamart
       run: |
         mvn clean install
         mvn exec:java
 
     - name: Run WordsGraph Java Module
       shell: pwsh
-      working-directory: WordsGraph
+      working-directory: ./WordsGraph
       run: |
         mvn clean install
         mvn exec:java
 
     - name: Run APIGraph Java Module
       shell: pwsh
-      working-directory: APIGraph
+      working-directory: ./APIGraph
       run: |
         mvn clean install
         mvn exec:java
-
