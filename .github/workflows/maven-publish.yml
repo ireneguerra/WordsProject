@@ -1,0 +1,83 @@
+name: Execute Terraform and Java Classes
+
+on:
+  workflow_dispatch: # Permite disparar el workflow manualmente
+
+jobs:
+  execute-workflow:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Solicitar Acceso a las Credenciales Dinámicamente
+    - name: Prompt for AWS Access Key
+      id: aws_keys
+      run: |
+        echo "::set-output name=AWS_ACCESS_KEY_ID::${AWS_ACCESS_KEY_ID}"
+        echo "::set-output name=AWS_SECRET_ACCESS_KEY::${AWS_SECRET_ACCESS_KEY}"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ github.event.inputs.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ github.event.inputs.AWS_SECRET_ACCESS_KEY }}
+
+    # 2. Configurar Credenciales Dinámicas
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        aws-access-key-id: ${{ steps.aws_keys.outputs.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ steps.aws_keys.outputs.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    # 3. Ejecutar Terraform (init, plan y apply)
+    - name: Terraform Init
+      working-directory: ./terraforms
+      run: terraform init
+
+    - name: Terraform Plan
+      working-directory: ./terraforms
+      run: terraform plan
+
+    - name: Terraform Apply
+      working-directory: ./terraforms
+      run: terraform apply -auto-approve
+
+# 4. Ejecutar Terraform (init, plan y apply) en la carpeta `terraforms`
+    - name: Terraform Init
+      working-directory: ./terraforms
+      run: terraform init
+
+    - name: Terraform Plan
+      working-directory: ./terraforms
+      run: terraform plan
+
+    - name: Terraform Apply
+      working-directory: ./terraforms
+      run: terraform apply -auto-approve
+
+    ### Ejecución de los módulos Java ###
+
+    # 5. Ejecutar BookCrawler
+    - name: Run BookCrawler Java Module
+      working-directory: ./BookCrawler
+      run: |
+        mvn clean install
+        mvn exec:java
+
+    # 6. Ejecutar WordCounterDatamart
+    - name: Run WordCounterDatamart Java Module
+      working-directory: ./WordCounterDatamart
+      run: |
+        mvn clean install
+        mvn exec:java
+
+    # 7. Ejecutar WordsGraph
+    - name: Run WordsGraph Java Module
+      working-directory: ./WordsGraph
+      run: |
+        mvn clean install
+        mvn exec:java
+
+    # 8. Ejecutar APIGraph
+    - name: Run APIGraph Java Module
+      working-directory: ./APIGraph
+      run: |
+        mvn clean install
+        mvn exec:java
