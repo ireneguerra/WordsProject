@@ -29,39 +29,39 @@ jobs:
 
     # 2. Ejecutar Terraform (init, plan y apply) en la carpeta terraforms
     - name: Terraform Init
-      working-directory: terraforms
+      working-directory: WordsProject/terraforms
       run: terraform init
 
     - name: Terraform Plan
-      working-directory: terraforms
+      working-directory: WordsProject/terraforms
       run: terraform plan
 
     - name: Terraform Apply
-      working-directory: terraforms
+      working-directory: WordsProject/terraforms
       run: terraform apply -auto-approve
 
     # 3. Ejecutar módulos Java...
 
     - name: Run BookCrawler Java Module
-      working-directory: BookCrawler
+      working-directory: WordsProject/BookCrawler
       run: |
         mvn clean install
         mvn exec:java
 
     - name: Run WordCounterDatamart Java Module
-      working-directory: WordCounterDatamart
+      working-directory: WordsProject/WordCounterDatamart
       run: |
         mvn clean install
         mvn exec:java
 
     - name: Run WordsGraph Java Module
-      working-directory: WordsGraph
+      working-directory: WordsProject/WordsGraph
       run: |
         mvn clean install
         mvn exec:java
 
     - name: Run APIGraph Java Module
-      working-directory: APIGraph
+      working-directory: WordsProject/APIGraph
       run: |
         mvn clean install
         mvn exec:java
