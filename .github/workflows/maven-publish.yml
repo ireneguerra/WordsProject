@@ -64,10 +64,15 @@ jobs:
     - name: Install BookCrawler Java Module
       working-directory: BookCrawler
       run: mvn clean install
-
+    
+    - name: List compiled classes
+      working-directory: BookCrawler
+      run: dir target\classes\org\example
+    
     - name: Execute BookCrawler Java Module
       working-directory: BookCrawler
       run: mvn exec:java -Dexec.mainClass="org.example.Main" -X
+
 
     # WordCounterDatamart Module
     - name: Install WordCounterDatamart Java Module
