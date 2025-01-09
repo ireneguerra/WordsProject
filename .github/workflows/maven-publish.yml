@@ -1,4 +1,3 @@
-
 name: Execute Terraform and Java Classes
 
 on:
@@ -56,31 +55,34 @@ jobs:
 
     # 5. Ejecutar módulos Java...
 
-    - name: Run BookCrawler Java Module (Debug Mode)
+    # BookCrawler Module
+    - name: Run BookCrawler Java Module
       shell: pwsh
       working-directory: BookCrawler
       run: |
         mvn clean install
-        mvn exec:java -X
+        mvn exec:java -Dexec.mainClass=org.example.Main
 
-
+    # WordCounterDatamart Module
     - name: Run WordCounterDatamart Java Module
       shell: pwsh
       working-directory: WordCounterDatamart
       run: |
         mvn clean install
-        mvn exec:java
+        mvn exec:java -Dexec.mainClass=org.example.WordCounterMain
 
+    # WordsGraph Module
     - name: Run WordsGraph Java Module
       shell: pwsh
       working-directory: WordsGraph
       run: |
         mvn clean install
-        mvn exec:java
+        mvn exec:java -Dexec.mainClass=org.example.WordsGraphMain
 
+    # APIGraph Module
     - name: Run APIGraph Java Module
       shell: pwsh
       working-directory: APIGraph
       run: |
         mvn clean install
-        mvn exec:java
+        mvn exec:java -Dexec.mainClass=org.example.APIGraphMain
