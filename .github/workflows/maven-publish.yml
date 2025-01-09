@@ -22,13 +22,21 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # 2. Instalar Terraform
+    # 2. Configurar JDK 11
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: maven
+
+    # 3. Instalar Terraform
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: 1.5.7
 
-    # 3. Configurar Credenciales AWS
+    # 4. Configurar Credenciales AWS
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
@@ -37,7 +45,7 @@ jobs:
         aws-session-token: ${{ github.event.inputs.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
 
-    # 4. Ejecutar Terraform en la carpeta "terraforms"
+    # 5. Ejecutar Terraform en la carpeta "terraforms"
     - name: Terraform Init
       working-directory: terraforms
       run: terraform init
@@ -50,7 +58,7 @@ jobs:
       working-directory: terraforms
       run: terraform apply -auto-approve
 
-    # 5. Ejecutar módulos Java...
+    # 6. Ejecutar módulos Java...
 
     # BookCrawler Module
     - name: Install BookCrawler Java Module
@@ -68,7 +76,7 @@ jobs:
 
     - name: Execute WordCounterDatamart Java Module
       working-directory: WordCounterDatamart
-      run: mvn exec:java -Dexec.mainClass=org.example.Main
+      run: mvn exec:java -Dexec.mainClass=org.example.WordCounterMain
 
     # WordsGraph Module
     - name: Install WordsGraph Java Module
@@ -77,7 +85,7 @@ jobs:
 
     - name: Execute WordsGraph Java Module
       working-directory: WordsGraph
-      run: mvn exec:java -Dexec.mainClass=org.example.Main
+      run: mvn exec:java -Dexec.mainClass=org.example.WordsGraphMain
 
     # APIGraph Module
     - name: Install APIGraph Java Module
@@ -86,4 +94,4 @@ jobs:
 
     - name: Execute APIGraph Java Module
       working-directory: APIGraph
-      run: mvn exec:java -Dexec.mainClass=org.example.Main
+      run: mvn exec:java -Dexec.mainClass=org.example.APIGraphMain
