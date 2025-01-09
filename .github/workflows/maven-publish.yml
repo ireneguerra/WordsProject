@@ -9,21 +9,23 @@ on:
       AWS_SECRET_ACCESS_KEY:
         description: "AWS Secret Access Key"
         required: true
+      AWS_SESSION_TOKEN:
+        description: "AWS Session Token"
+        required: true
 
 jobs:
   execute-workflow:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Configurar las Credenciales Pasadas por Inputs
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
         aws-access-key-id: ${{ github.event.inputs.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ github.event.inputs.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ github.event.inputs.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
 
-    # 2. Ejecutar Terraform (init, plan y apply)
     - name: Terraform Init
       working-directory: ./terraforms
       run: terraform init
@@ -36,29 +38,24 @@ jobs:
       working-directory: ./terraforms
       run: terraform apply -auto-approve
 
-    # 3. Ejecutar módulos Java...
     - name: Run BookCrawler Java Module
       working-directory: ./BookCrawler
       run: |
         mvn clean install
         mvn exec:java
 
-
-    # 6. Ejecutar WordCounterDatamart
     - name: Run WordCounterDatamart Java Module
       working-directory: ./WordCounterDatamart
       run: |
         mvn clean install
         mvn exec:java
 
-    # 7. Ejecutar WordsGraph
     - name: Run WordsGraph Java Module
       working-directory: ./WordsGraph
       run: |
         mvn clean install
         mvn exec:java
-
-    # 8. Ejecutar APIGraph
+  
     - name: Run APIGraph Java Module
       working-directory: ./APIGraph
       run: |
