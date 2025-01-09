@@ -18,9 +18,11 @@ jobs:
     runs-on: windows-latest  # Usar Windows porque Terraform se ejecuta en PowerShell
 
     steps:
+    # 1. Clonar el Repositorio
     - name: Checkout Code
       uses: actions/checkout@v3
 
+    # 2. Instalar Terraform
     - name: Install Terraform
       shell: pwsh  # Usar PowerShell
       run: |
@@ -28,8 +30,10 @@ jobs:
         Invoke-WebRequest -Uri https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_windows_amd64.zip -OutFile terraform.zip
         Expand-Archive -Path terraform.zip -DestinationPath $env:USERPROFILE\terraform
         $env:PATH += ";$env:USERPROFILE\terraform"
+        Write-Host "Verificando instalación de Terraform..."
         terraform version
 
+    # 3. Configurar Credenciales AWS con el Token de Sesión
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
@@ -38,6 +42,7 @@ jobs:
         aws-session-token: ${{ github.event.inputs.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
 
+    # 4. Ejecutar Terraform en la carpeta "terraforms"
     - name: Terraform Init
       shell: pwsh  # Usar PowerShell
       working-directory: terraforms
@@ -53,6 +58,7 @@ jobs:
       working-directory: terraforms
       run: terraform apply -auto-approve
 
+    # 5. Ejecutar módulos Java...
 
     - name: Run BookCrawler Java Module
       shell: pwsh
