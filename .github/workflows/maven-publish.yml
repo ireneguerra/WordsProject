@@ -1,4 +1,4 @@
-name: Execute Terraform and Java Classes
+name: Execute Terraform and Java JARs
 
 on:
   workflow_dispatch:
@@ -18,14 +18,17 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    # 1. Clonar el Repositorio
     - name: Checkout Code
       uses: actions/checkout@v3
 
+    # 2. Instalar Terraform (Usando una Acción de GitHub)
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: 1.5.7
 
+    # 3. Configurar Credenciales AWS con el Token de Sesión
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
@@ -34,41 +37,35 @@ jobs:
         aws-session-token: ${{ github.event.inputs.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
 
-    - name: Validate Terraforms Directory
-      shell: pwsh
-      run: |
-        if (!(Test-Path -Path terraforms)) {
-          Write-Error "Directory 'terraforms' does not exist."
-          exit 1
-        }
-
+    # 4. Ejecutar Terraform en la carpeta "terraforms"
     - name: Terraform Init
       shell: pwsh
       working-directory: terraforms
-      run: terraform init -input=false -no-color
+      run: terraform init
 
     - name: Terraform Plan
       shell: pwsh
       working-directory: terraforms
-      run: terraform plan -no-color
+      run: terraform plan
 
     - name: Terraform Apply
       shell: pwsh
       working-directory: terraforms
-      run: terraform apply -auto-approve -no-color
+      run: terraform apply -auto-approve
 
-    - name: Run BookCrawler JAR
+    # 5. Ejecutar los archivos JAR directamente desde "terraforms"
+    - name: Run BookCrawler.jar
       shell: pwsh
-      run: java -jar BookCrawler/target/BookCrawler.jar
+      run: java -jar terraforms/BookCrawler.jar
 
-    - name: Run WordCounterDatamart JAR
+    - name: Run WordCounterDatamart.jar
       shell: pwsh
-      run: java -jar WordCounterDatamart/target/WordCounterDatamart.jar
+      run: java -jar terraforms/WordCounterDatamart.jar
 
-    - name: Run WordsGraph JAR
+    - name: Run WordsGraph.jar
       shell: pwsh
-      run: java -jar WordsGraph/target/WordsGraph.jar
+      run: java -jar terraforms/WordsGraph.jar
 
-    - name: Run APIGraph JAR
+    - name: Run APIGraph.jar
       shell: pwsh
-      run: java -jar APIGraph/target/APIGraph.jar
+      run: java -jar terraforms/APIGraph.jar
