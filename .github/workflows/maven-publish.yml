@@ -55,12 +55,13 @@ jobs:
 
     # 5. Ejecutar módulos Java...
 
-    - name: Run BookCrawler Java Module
+    - name: Run BookCrawler Java Module (Debug Mode)
       shell: pwsh
       working-directory: BookCrawler
       run: |
         mvn clean install
-        mvn exec:java
+        mvn exec:java -X
+
 
     - name: Run WordCounterDatamart Java Module
       shell: pwsh
