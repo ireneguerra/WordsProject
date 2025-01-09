@@ -15,20 +15,20 @@ on:
 
 jobs:
   execute-workflow:
-    runs-on: windows-latest  # Usar Windows porque Terraform se ejecuta en PowerShell
+    runs-on: windows-latest  # Usar un runner de Windows
 
     steps:
     # 1. Clonar el Repositorio
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # 2. Instalar Terraform (Usando una Acción de GitHub)
+    # 2. Instalar Terraform
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.5.7  # Versión de Terraform a instalar
+        terraform_version: 1.5.7
 
-    # 3. Configurar Credenciales AWS con el Token de Sesión
+    # 3. Configurar Credenciales AWS
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
@@ -39,50 +39,51 @@ jobs:
 
     # 4. Ejecutar Terraform en la carpeta "terraforms"
     - name: Terraform Init
-      shell: pwsh  # Usar PowerShell
       working-directory: terraforms
       run: terraform init
 
     - name: Terraform Plan
-      shell: pwsh
       working-directory: terraforms
       run: terraform plan
 
     - name: Terraform Apply
-      shell: pwsh
       working-directory: terraforms
       run: terraform apply -auto-approve
 
     # 5. Ejecutar módulos Java...
 
     # BookCrawler Module
-    - name: Run BookCrawler Java Module
-      shell: pwsh
+    - name: Install BookCrawler Java Module
       working-directory: BookCrawler
-      run: |
-        mvn clean install
-        mvn exec:java -Dexec.mainClass=org.example.Main
+      run: mvn clean install
+
+    - name: Execute BookCrawler Java Module
+      working-directory: BookCrawler
+      run: mvn exec:java -Dexec.mainClass=org.example.Main
 
     # WordCounterDatamart Module
-    - name: Run WordCounterDatamart Java Module
-      shell: pwsh
+    - name: Install WordCounterDatamart Java Module
       working-directory: WordCounterDatamart
-      run: |
-        mvn clean install
-        mvn exec:java -Dexec.mainClass=org.example.WordCounterMain
+      run: mvn clean install
+
+    - name: Execute WordCounterDatamart Java Module
+      working-directory: WordCounterDatamart
+      run: mvn exec:java -Dexec.mainClass=org.example.Main
 
     # WordsGraph Module
-    - name: Run WordsGraph Java Module
-      shell: pwsh
+    - name: Install WordsGraph Java Module
       working-directory: WordsGraph
-      run: |
-        mvn clean install
-        mvn exec:java -Dexec.mainClass=org.example.WordsGraphMain
+      run: mvn clean install
+
+    - name: Execute WordsGraph Java Module
+      working-directory: WordsGraph
+      run: mvn exec:java -Dexec.mainClass=org.example.Main
 
     # APIGraph Module
-    - name: Run APIGraph Java Module
-      shell: pwsh
+    - name: Install APIGraph Java Module
       working-directory: APIGraph
-      run: |
-        mvn clean install
-        mvn exec:java -Dexec.mainClass=org.example.APIGraphMain
+      run: mvn clean install
+
+    - name: Execute APIGraph Java Module
+      working-directory: APIGraph
+      run: mvn exec:java -Dexec.mainClass=org.example.Main
