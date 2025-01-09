@@ -71,7 +71,7 @@ jobs:
     
     - name: Execute BookCrawler Java Module
       working-directory: BookCrawler
-      run: mvn exec:java -Dexec.mainClass="org.example.Main" -X
+      run: mvn exec:java "-Dexec.mainClass=org.example.Main" -X
 
 
     # WordCounterDatamart Module
