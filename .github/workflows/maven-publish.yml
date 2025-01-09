@@ -15,20 +15,17 @@ on:
 
 jobs:
   execute-workflow:
-    runs-on: windows-latest  # Usar Windows porque Terraform se ejecuta en PowerShell
+    runs-on: windows-latest
 
     steps:
-    # 1. Clonar el Repositorio
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # 2. Instalar Terraform (Usando una Acción de GitHub)
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.5.7  # Versión de Terraform a instalar
+        terraform_version: 1.5.7
 
-    # 3. Configurar Credenciales AWS con el Token de Sesión
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
@@ -37,49 +34,41 @@ jobs:
         aws-session-token: ${{ github.event.inputs.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
 
-    # 4. Ejecutar Terraform en la carpeta "terraforms"
+    - name: Validate Terraforms Directory
+      shell: pwsh
+      run: |
+        if (!(Test-Path -Path terraforms)) {
+          Write-Error "Directory 'terraforms' does not exist."
+          exit 1
+        }
+
     - name: Terraform Init
-      shell: pwsh  # Usar PowerShell
+      shell: pwsh
       working-directory: terraforms
-      run: terraform init
+      run: terraform init -input=false -no-color
 
     - name: Terraform Plan
       shell: pwsh
       working-directory: terraforms
-      run: terraform plan
+      run: terraform plan -no-color
 
     - name: Terraform Apply
       shell: pwsh
       working-directory: terraforms
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -no-color
 
-    # 5. Ejecutar módulos Java...
-
-    - name: Run BookCrawler Java Module (Debug Mode)
+    - name: Run BookCrawler JAR
       shell: pwsh
-      working-directory: BookCrawler
-      run: |
-        mvn clean install
-        mvn exec:java -X
+      run: java -jar BookCrawler/target/BookCrawler.jar
 
-
-    - name: Run WordCounterDatamart Java Module
+    - name: Run WordCounterDatamart JAR
       shell: pwsh
-      working-directory: WordCounterDatamart
-      run: |
-        mvn clean install
-        mvn exec:java
+      run: java -jar WordCounterDatamart/target/WordCounterDatamart.jar
 
-    - name: Run WordsGraph Java Module
+    - name: Run WordsGraph JAR
       shell: pwsh
-      working-directory: WordsGraph
-      run: |
-        mvn clean install
-        mvn exec:java
+      run: java -jar WordsGraph/target/WordsGraph.jar
 
-    - name: Run APIGraph Java Module
+    - name: Run APIGraph JAR
       shell: pwsh
-      working-directory: APIGraph
-      run: |
-        mvn clean install
-        mvn exec:java
+      run: java -jar APIGraph/target/APIGraph.jar
