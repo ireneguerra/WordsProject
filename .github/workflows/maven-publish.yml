@@ -22,13 +22,20 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # 2. Instalar Terraform (Usando una Acción de GitHub)
+    # 2. Configurar Java 11
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+
+    # 3. Instalar Terraform
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: 1.5.7
 
-    # 3. Configurar Credenciales AWS con el Token de Sesión
+    # 4. Configurar Credenciales AWS
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
@@ -37,7 +44,7 @@ jobs:
         aws-session-token: ${{ github.event.inputs.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
 
-    # 4. Ejecutar Terraform en la carpeta "terraforms"
+    # 5. Ejecutar Terraform
     - name: Terraform Init
       shell: pwsh
       working-directory: terraforms
@@ -53,7 +60,7 @@ jobs:
       working-directory: terraforms
       run: terraform apply -auto-approve
 
-    # 5. Ejecutar los archivos JAR directamente desde "terraforms"
+    # 6. Ejecutar los archivos JAR directamente desde "terraforms"
     - name: Run BookCrawler.jar
       shell: pwsh
       run: java -jar terraforms/BookCrawler.jar
