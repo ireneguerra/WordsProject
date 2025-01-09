@@ -30,7 +30,7 @@ jobs:
         Invoke-WebRequest -Uri https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_windows_amd64.zip -OutFile terraform.zip
         Expand-Archive -Path terraform.zip -DestinationPath $env:USERPROFILE\terraform
         Write-Host "Agregando Terraform al PATH..."
-        [System.Environment]::SetEnvironmentVariable("PATH", $env:USERPROFILE\terraform + ";" + $env:PATH, [System.EnvironmentVariableTarget]::Process)
+        [System.Environment]::SetEnvironmentVariable("PATH", "$env:USERPROFILE\terraform;$env:PATH", [System.EnvironmentVariableTarget]::Process
         Write-Host "Verificando instalación de Terraform..."
         $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::Process)
         terraform version
