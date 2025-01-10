@@ -89,7 +89,7 @@ jobs:
 
     - name: Execute WordCounterDatamart Java Module
       working-directory: WordCounterDatamart
-      run: mvn exec:java "-Dexec.mainClass=org.example.WordCounterMain" -X
+      run: mvn exec:java "-Dexec.mainClass=org.example.Main" -X
 
     # WordsGraph Module
     - name: Install WordsGraph Java Module
@@ -98,7 +98,7 @@ jobs:
 
     - name: Execute WordsGraph Java Module
       working-directory: WordsGraph
-      run: mvn exec:java "-Dexec.mainClass=org.example.WordsGraphMain" -X
+      run: mvn exec:java "-Dexec.mainClass=org.example.Main" -X
 
     # APIGraph Module
     - name: Install APIGraph Java Module
@@ -107,4 +107,4 @@ jobs:
 
     - name: Execute APIGraph Java Module
       working-directory: APIGraph
-      run: mvn exec:java "-Dexec.mainClass=org.example.APIGraphMain" -X
+      run: mvn exec:java "-Dexec.mainClass=org.example.Main" -X
