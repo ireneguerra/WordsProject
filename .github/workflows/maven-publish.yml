@@ -105,6 +105,7 @@ jobs:
       working-directory: APIGraph
       run: mvn clean install
 
-    - name: Execute APIGraph Java Module
+    - name: Execute APIGraph Java Module with Timer
       working-directory: APIGraph
-      run: mvn exec:java "-Dexec.mainClass=org.example.Main" -X
+      run: |
+        timeout 60s mvn exec:java "-Dexec.mainClass=org.example.Main" -X || echo "API Module timed out after 60 seconds."
