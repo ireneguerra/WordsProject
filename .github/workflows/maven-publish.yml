@@ -15,7 +15,7 @@ on:
 
 jobs:
   execute-workflow:
-    runs-on: windows-latest  # Usar un runner de Windows
+    runs-on: windows-latest
 
     steps:
     # 1. Clonar el Repositorio
@@ -45,7 +45,16 @@ jobs:
         aws-session-token: ${{ github.event.inputs.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
 
-    # 5. Ejecutar Terraform en la carpeta "terraforms"
+    # 5. Configurar el perfil AWS 'default' para que el código Java lo use
+    - name: Configure AWS Default Profile
+      run: |
+        mkdir -p ~/.aws
+        echo "[default]" > ~/.aws/credentials
+        echo "aws_access_key_id=${{ github.event.inputs.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+        echo "aws_secret_access_key=${{ github.event.inputs.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+        echo "aws_session_token=${{ github.event.inputs.AWS_SESSION_TOKEN }}" >> ~/.aws/credentials
+
+    # 6. Ejecutar Terraform en la carpeta "terraforms"
     - name: Terraform Init
       working-directory: terraforms
       run: terraform init
@@ -58,7 +67,7 @@ jobs:
       working-directory: terraforms
       run: terraform apply -auto-approve
 
-    # 6. Ejecutar módulos Java...
+    # 7. Ejecutar módulos Java...
 
     # BookCrawler Module
     - name: Install BookCrawler Java Module
@@ -73,7 +82,6 @@ jobs:
       working-directory: BookCrawler
       run: mvn exec:java "-Dexec.mainClass=org.example.Main" -X
 
-
     # WordCounterDatamart Module
     - name: Install WordCounterDatamart Java Module
       working-directory: WordCounterDatamart
@@ -81,7 +89,7 @@ jobs:
 
     - name: Execute WordCounterDatamart Java Module
       working-directory: WordCounterDatamart
-      run: mvn exec:java -Dexec.mainClass="org.example.WordCounterMain" -X
+      run: mvn exec:java "-Dexec.mainClass=org.example.WordCounterMain" -X
 
     # WordsGraph Module
     - name: Install WordsGraph Java Module
@@ -90,7 +98,7 @@ jobs:
 
     - name: Execute WordsGraph Java Module
       working-directory: WordsGraph
-      run: mvn exec:java -Dexec.mainClass="org.example.WordsGraphMain" -X
+      run: mvn exec:java "-Dexec.mainClass=org.example.WordsGraphMain" -X
 
     # APIGraph Module
     - name: Install APIGraph Java Module
@@ -99,4 +107,4 @@ jobs:
 
     - name: Execute APIGraph Java Module
       working-directory: APIGraph
-      run: mvn exec:java -Dexec.mainClass="org.example.APIGraphMain" -X
+      run: mvn exec:java "-Dexec.mainClass=org.example.APIGraphMain" -X
