@@ -30,7 +30,7 @@ resource "tls_private_key" "ssh_key" {
 }
 
 resource "aws_key_pair" "my_key" {
-  key_name   = "terraform-mongo-key"
+  key_name   = "ec2-key"
   public_key = tls_private_key.ssh_key.public_key_openssh
 }
 

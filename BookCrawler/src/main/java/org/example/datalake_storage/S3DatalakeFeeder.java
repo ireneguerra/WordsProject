@@ -1,6 +1,6 @@
 package org.example.datalake_storage;
 
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
@@ -12,7 +12,6 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,9 +25,8 @@ public class S3DatalakeFeeder implements DatalakeFeeder {
 
     public S3DatalakeFeeder() {
         this.s3 = S3Client.builder()
-                .region(Region.US_EAST_1)
-                .endpointOverride(URI.create("https://s3.us-east-1.amazonaws.com"))
-                .credentialsProvider(ProfileCredentialsProvider.create())
+                .region(Region.US_EAST_1) // Configura la región según tus necesidades
+                .credentialsProvider(DefaultCredentialsProvider.create()) // Proveedor predeterminado
                 .build();
     }
 

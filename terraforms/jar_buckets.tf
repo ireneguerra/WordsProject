@@ -1,27 +1,29 @@
-######################
-# Ejemplo completo
-######################
 locals {
   bucket_name_4 = "bucket-de-tus-jars"
 
-  # Ajusta la ruta local de cada jar en Windows
+  # Ajusta la ruta local de cada jar en tu máquina
   jar_files = [
     {
       name = "BookCrawler.jar"
-      path = "BookCrawler.jar"
+      path = "../out/artifacts/BookCrawler_jar/BookCrawler.jar"
     },
     {
       name = "WordCounterDatamart.jar"
-      path = "WordCounterDatamart.jar"
+      path = "../out/artifacts/WordCounterDatamart_jar/WordCounterDatamart.jar"
     },
     {
       name = "WordsGraph.jar"
-      path = "WordsGraph.jar"
+      path = "../out/artifacts/WordsGraph_jar/WordsGraph.jar"
     },
     {
       name = "APIGraph.jar"
-      path = "APIGraph.jar"
+      path = "../APIGraph/target/APIGraph-1.0-SNAPSHOT.jar"
     }
+  ]
+
+  # Calculamos el hash de los archivos JAR para detectar cambios
+  jar_hashes = [
+    for jar in local.jar_files : filemd5(jar.path)
   ]
 
   # Construimos la cadena de comandos para cada jar
@@ -32,6 +34,11 @@ locals {
 }
 
 resource "null_resource" "upload_jars" {
+  # Activar el recurso siempre que cambien los hashes de los archivos JAR
+  triggers = {
+    jar_hashes = join(",", local.jar_hashes)
+  }
+
   provisioner "local-exec" {
     interpreter = ["powershell", "-Command"]
     command = <<-EOT
