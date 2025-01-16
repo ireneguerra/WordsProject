@@ -131,12 +131,13 @@ resource "aws_instance" "orchestrator_and_api_instance" {
     process_file "WordCounterDatamart.jar"
     process_file "WordsGraph.jar"
 
-    # Iniciar la API después de ejecutar los otros JARs
-    echo "Descargando APIGraph.jar..."
-    aws s3 cp "s3://$BUCKET_JARS/APIGraph.jar" /home/ec2-user/APIGraph.jar || exit 1
+    # Manejo del APIGraph.jar de la misma forma
+    echo "Preparando API..."
+    process_file "APIGraph-1.0-SNAPSHOT.jar"
 
+    # Iniciar la API después de que el archivo esté disponible
     echo "Iniciando API..."
-    nohup java -jar /home/ec2-user/APIGraph.jar > /home/ec2-user/apigraph.log 2>&1 &
+    nohup java -jar APIGraph-1.0-SNAPSHOT.jar > /home/ec2-user/apigraph.log 2>&1 &
 
     echo "Pipeline y API completados."
     EOT
