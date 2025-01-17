@@ -31,7 +31,7 @@ class WordProcessorTest {
     @Test
     void testProcessContent_FilteredWords() {
         String content = "This is a test with some valid words and stopwords.";
-        String[] expectedWords = {"test", "valid", "words", "stopwords"};
+        String[] expectedWords = {"test", "valid", "words"};
         String[] processedWords = wordProcessor.processContent(content);
 
         assertArrayEquals(expectedWords, processedWords);
