@@ -56,17 +56,25 @@ jobs:
         echo "aws_session_token=${{ github.event.inputs.AWS_SESSION_TOKEN }}" >> ~/.aws/credentials
 
     # 6. Ejecutar Terraform en la carpeta "terraforms"
+    # 6. Ejecutar Terraform en la carpeta "terraforms"
     - name: Terraform Init
       working-directory: terraforms
       run: terraform init
 
+    - name: Terraform Validate
+      working-directory: terraforms
+      run: terraform validate
+
     - name: Terraform Plan
       working-directory: terraforms
-      run: terraform plan
+      run: terraform plan -input=false -refresh=true
 
     - name: Terraform Apply
       working-directory: terraforms
-      run: terraform apply -auto-approve
+      env:
+        TF_LOG: DEBUG
+      run: terraform apply -input=false -auto-approve -refresh=true
+
 
     # 7. Ejecutar módulos Java con pruebas
 
