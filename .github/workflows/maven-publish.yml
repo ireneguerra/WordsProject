@@ -130,7 +130,7 @@ jobs:
       working-directory: APIGraph
       run: |
         powershell -Command "& {
-            $process = Start-Process 'mvn' '-Dexec.mainClass=org.example.Main exec:java -X' -PassThru -NoNewWindow;
+            $process = Start-Process 'mvn' '-Dexec.mainClass=org.example.Main exec:java -X' -PassThru -NoNewWindow -RedirectStandardOutput output.log -RedirectStandardError error.log;
             Start-Sleep -Seconds 60;
             if (-not $process.HasExited) {
                 Stop-Process -Id $process.Id -Force;
@@ -140,5 +140,6 @@ jobs:
                 Write-Output 'API Module completed successfully.';
             }
         }"
+
 
 
