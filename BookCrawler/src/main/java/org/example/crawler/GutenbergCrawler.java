@@ -44,11 +44,11 @@ public class GutenbergCrawler implements BookCrawler {
         }
     }
 
-    private String buildBookDownloadUrl(int bookId) {
+    public String buildBookDownloadUrl(int bookId) {
         return "https://www.gutenberg.org/cache/epub/" + bookId + "/pg" + bookId + ".txt";
     }
 
-    private boolean isValidUrl(String urlString) {
+    public boolean isValidUrl(String urlString) {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(urlString).openConnection();
             connection.setRequestMethod("HEAD");
