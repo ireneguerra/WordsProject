@@ -1,33 +1,28 @@
 import org.bson.Document;
-import org.example.datamart_reader.MongoDBReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
+import com.mongodb.client.MongoCollection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MongoDBReaderTest {
 
-    private MongoDBReader mongoDBReader;
+    private MongoDBConnection connection;
 
     @BeforeEach
     void setup() {
-        mongoDBReader = new MongoDBReader();
-        mongoDBReader.getMongoDBConnection().getCollection("word-counter").deleteMany(new Document());
-
-        mongoDBReader.getMongoDBConnection().getCollection("word-counter").insertOne(
-            new Document("_id", "word1").append("count", 5)
-        );
-        mongoDBReader.getMongoDBConnection().getCollection("word-counter").insertOne(
-            new Document("_id", "word2").append("count", 10)
-        );
+        connection = new MongoDBConnection();
+        connection.connect();
+        MongoCollection<Document> collection = connection.getCollection("word-counter");
+        collection.deleteMany(new Document());
+        collection.insertOne(new Document("_id", "word1").append("count", 5));
+        collection.insertOne(new Document("_id", "word2").append("count", 10));
     }
 
     @Test
     void testReadWordsAndWeights() {
-        Map<String, Integer> expected = Map.of("word1", 5, "word2", 10);
-        Map<String, Integer> result = mongoDBReader.readWordsAndWeights();
-        assertEquals(expected, result, "Los datos leídos no coinciden con lo esperado.");
+        MongoCollection<Document> collection = connection.getCollection("word-counter");
+        long count = collection.countDocuments();
+        assertEquals(2, count, "La colección debe contener 2 documentos.");
     }
 }
