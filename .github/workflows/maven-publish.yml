@@ -167,3 +167,22 @@ jobs:
               Write-Output 'API Module timed out after 60 seconds (but continuing).'
             }
           }"
+
+      # 8. Ejecutar Terraform en la carpeta "terraform_final"
+      - name: Terraform Init (Final)
+        working-directory: terraform_final
+        run: terraform init
+
+      - name: Terraform Validate (Final)
+        working-directory: terraform_final
+        run: terraform validate
+
+      - name: Terraform Plan (Final)
+        working-directory: terraform_final
+        run: terraform plan -input=false -refresh=true
+
+      - name: Terraform Apply (Final)
+        working-directory: terraform_final
+        env:
+          TF_LOG: DEBUG
+        run: terraform apply -input=false -auto-approve -refresh=true
