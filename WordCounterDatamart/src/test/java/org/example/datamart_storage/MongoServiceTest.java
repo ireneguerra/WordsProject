@@ -37,20 +37,5 @@ class MongoServiceTest {
 
         assertFalse(mongoService.isCollectionEmpty());
     }
-
-    @Test
-    void testIsCollectionEmpty_Empty() {
-        assertTrue(mongoService.isCollectionEmpty());
-    }
-
-    @Test
-    void testIsCollectionEmpty_NotEmpty() {
-        Map<String, Integer> wordCount = new HashMap<>();
-        wordCount.put("word", 1);
-
-        mongoService.insertWords(wordCount);
-
-        assertFalse(mongoService.isCollectionEmpty());
-    }
 }
 
