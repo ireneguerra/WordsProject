@@ -122,25 +122,26 @@ jobs:
       working-directory: APIGraph
       run: mvn clean install
 
-    - name: Execute APIGraph Java Module with Timer
-      working-directory: APIGraph
+    - name: Execute APIGraph Java Module with Timer (non-failing)
       run: |
-          powershell -Command "& {
-              # Iniciar el proceso Maven y capturar el objeto del proceso
-              $process = Start-Process 'mvn' 'exec:java -Dexec.mainClass=org.example.Main -X' -PassThru -NoNewWindow
+        powershell -Command "& {
+          # Iniciar el proceso y obtener el objeto en $process
+          $process = Start-Process 'mvn' 'exec:java -Dexec.mainClass=org.example.Main -X' -PassThru
+    
+          # Esperar 60 segundos
+          Start-Sleep -Seconds 60
+    
+          # Si el proceso YA terminó, mostramos mensaje de éxito
+          if ($process.HasExited) {
+            Write-Output 'API Module completed within 60 seconds.'
+          }
+          else {
+            # Si sigue vivo, lo detenemos y seguimos sin marcar error
+            Stop-Process -Id $process.Id -Force
+            Write-Output 'API Module timed out after 60 seconds (but continuing).'
+          }
+        }"
 
-              # Esperar hasta 60 segundos (60000 milisegundos) para que el proceso termine
-              $completed = $process.WaitForExit(60000)  # 60,000 ms = 60 segundos
-
-              if (-not $completed) {
-                  # Si el proceso aún está ejecutándose después de 60 segundos, detenerlo
-                  Stop-Process -Id $process.Id -Force
-                  Write-Output 'API Module timed out after 60 seconds.'
-              } else {
-                  # Si el proceso finaliza dentro del tiempo, indicar éxito
-                  Write-Output 'API Module completed successfully.'
-              }
-          }"
 
 
 
