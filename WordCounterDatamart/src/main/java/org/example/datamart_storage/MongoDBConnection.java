@@ -19,13 +19,13 @@ public class MongoDBConnection implements DatamartConnection {
     private MongoDatabase database;
 
     public void connect() {
-        String bucketName = "public-ip-mongo-bucket";
-        String key = "public_ip.txt";
+        String bucketName = "ip-mongo-bucket";
+        String key = "ip_mongo.txt";
         String host = readHostFromS3(bucketName, key);
         int port = 27017;
 
         if (host == null || host.isEmpty()) {
-            throw new IllegalStateException("No se pudo leer la IP pública del bucket.");
+            throw new IllegalStateException("No se pudo leer la IP del bucket.");
         }
 
         MongoClientSettings settings = MongoClientSettings.builder()
