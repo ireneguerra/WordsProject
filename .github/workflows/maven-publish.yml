@@ -129,13 +129,16 @@ jobs:
     - name: Execute APIGraph Java Module with Timer
       working-directory: APIGraph
       run: |
-        powershell -Command "& { 
-            $process = Start-Process 'mvn' '-Dexec.mainClass=org.example.Main exec:java -X' -PassThru; 
-            Start-Sleep -Seconds 60; 
-            if (-Not $process.HasExited) { 
-                Stop-Process -Id $process.Id; 
-                Write-Output 'API Module timed out after 60 seconds.'; 
-                exit 1; 
-            } 
+        powershell -Command "& {
+            $process = Start-Process 'mvn' '-Dexec.mainClass=org.example.Main exec:java -X' -PassThru -NoNewWindow;
+            Start-Sleep -Seconds 60;
+            if (-not $process.HasExited) {
+                Stop-Process -Id $process.Id -Force;
+                Write-Output 'API Module timed out after 60 seconds.';
+                exit 1;
+            } else {
+                Write-Output 'API Module completed successfully.';
+            }
         }"
+
 
