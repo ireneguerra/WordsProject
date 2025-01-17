@@ -56,19 +56,19 @@ jobs:
 
       # 6. Ejecutar Terraform en la carpeta "terraforms"
       - name: Terraform Init
-        working-directory: terraforms_test_local
+        working-directory: terraform_test_local
         run: terraform init
 
       - name: Terraform Validate
-        working-directory: terraforms_test_local
+        working-directory: terraform_test_local
         run: terraform validate
 
       - name: Terraform Plan
-        working-directory: terraforms_test_local
+        working-directory: terraform_test_local
         run: terraform plan -input=false -refresh=true
 
       - name: Terraform Apply
-        working-directory: terraforms_test_local
+        working-directory: terraform_test_local
         env:
           TF_LOG: DEBUG
         run: terraform apply -input=false -auto-approve -refresh=true
