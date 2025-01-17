@@ -1,4 +1,4 @@
-name: Execute Terraform and Java Classes
+name: Execute Terraform and Java Classes with Tests
 
 on:
   workflow_dispatch:
@@ -67,17 +67,17 @@ jobs:
       working-directory: terraforms
       run: terraform apply -auto-approve
 
-    # 7. Ejecutar módulos Java...
+    # 7. Ejecutar módulos Java con pruebas
 
     # BookCrawler Module
     - name: Install BookCrawler Java Module
       working-directory: BookCrawler
       run: mvn clean install
     
-    - name: List compiled classes
+    - name: Run Tests for BookCrawler Module
       working-directory: BookCrawler
-      run: dir target\classes\org\example
-    
+      run: mvn test
+
     - name: Execute BookCrawler Java Module
       working-directory: BookCrawler
       run: mvn exec:java "-Dexec.mainClass=org.example.Main" -X
@@ -86,6 +86,10 @@ jobs:
     - name: Install WordCounterDatamart Java Module
       working-directory: WordCounterDatamart
       run: mvn clean install
+
+    - name: Run Tests for WordCounterDatamart Module
+      working-directory: WordCounterDatamart
+      run: mvn test
 
     - name: Execute WordCounterDatamart Java Module
       working-directory: WordCounterDatamart
@@ -96,6 +100,10 @@ jobs:
       working-directory: WordsGraph
       run: mvn clean install
 
+    - name: Run Tests for WordsGraph Module
+      working-directory: WordsGraph
+      run: mvn test
+
     - name: Execute WordsGraph Java Module
       working-directory: WordsGraph
       run: mvn exec:java "-Dexec.mainClass=org.example.Main" -X
@@ -104,6 +112,10 @@ jobs:
     - name: Install APIGraph Java Module
       working-directory: APIGraph
       run: mvn clean install
+
+    - name: Run Tests for APIGraph Module
+      working-directory: APIGraph
+      run: mvn test
 
     - name: Execute APIGraph Java Module with Timer
       working-directory: APIGraph
