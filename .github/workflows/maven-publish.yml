@@ -130,16 +130,18 @@ jobs:
       working-directory: APIGraph
       run: |
         powershell -Command "& {
-            $process = Start-Process 'mvn' '-Dexec.mainClass=org.example.Main exec:java -X' -PassThru -NoNewWindow -RedirectStandardOutput output.log -RedirectStandardError error.log;
-            Start-Sleep -Seconds 60;
-            if (-not $process.HasExited) {
-                Stop-Process -Id $process.Id -Force;
-                Write-Output 'API Module timed out after 60 seconds.';
-                exit 1;
+            $process = Start-Process 'mvn' 'exec:java "-Dexec.mainClass=org.example.Main" -X' -PassThru
+            $completed = $process.WaitForExit(60000)  # 60,000 ms = 60 segundos
+    
+            if (-not $completed) {
+                Stop-Process -Id $process.Id -Force
+                Write-Output 'API Module timed out after 60 seconds.'
+                exit 1
             } else {
-                Write-Output 'API Module completed successfully.';
+                Write-Output 'API Module completed successfully.'
             }
         }"
+
 
 
 
