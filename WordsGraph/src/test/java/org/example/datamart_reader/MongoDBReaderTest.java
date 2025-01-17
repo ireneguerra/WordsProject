@@ -13,24 +13,26 @@ class MongoDBReaderTest {
     private MongoDBReader mongoDBReader;
 
     @BeforeEach
-    void setUp() {
-        mongoDBReader = new MongoDBReader() {
-            protected MongoDBConnection getMongoDBConnection() {
-                return new StubMongoDBConnection();
-            }
-        };
+    void setup() {
+        // Limpia la colección antes de la prueba para garantizar un estado limpio
+        mongoDBReader.getMongoDBConnection().getCollection("word-counter").deleteMany(new Document());
+    
+        // Inserta datos específicos para la prueba
+        mongoDBReader.getMongoDBConnection().getCollection("word-counter").insertOne(
+            new Document("_id", "word1").append("count", 5)
+        );
+        mongoDBReader.getMongoDBConnection().getCollection("word-counter").insertOne(
+            new Document("_id", "word2").append("count", 10)
+        );
     }
 
     @Test
     void testReadWordsAndWeights() {
-        Map<String, Integer> expected = new HashMap<>();
-        expected.put("word1", 5);
-        expected.put("word2", 10);
-
+        Map<String, Integer> expected = Map.of("word1", 5, "word2", 10);
         Map<String, Integer> result = mongoDBReader.readWordsAndWeights();
-
-        assertEquals(expected, result);
+        assertEquals(expected, result, "Los datos leídos no coinciden con lo esperado.");
     }
+
 
     @Test
     void testCloseConnection() {
