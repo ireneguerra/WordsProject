@@ -147,8 +147,8 @@ resource "aws_instance" "orchestrator_and_api_instance" {
     # Ejecutar el script inmediatamente al iniciar la instancia
     bash /home/ec2-user/orchestrate_and_api.sh >> /home/ec2-user/orchestrator_and_api.log 2>&1
 
-    # Configurar cron job para ejecución cada 2 horas
-    echo "0 */2 * * * ec2-user bash /home/ec2-user/orchestrate_and_api.sh >> /home/ec2-user/orchestrator_and_api.log 2>&1" | sudo tee /etc/cron.d/orchestrate_and_api
+    # Configurar cron job
+    # echo "0 2 * * * ec2-user bash /home/ec2-user/orchestrate_and_api.sh >> /home/ec2-user/orchestrator_and_api.log 2>&1" | sudo tee /etc/cron.d/orchestrate_and_api
     sudo systemctl start crond
     sudo systemctl enable crond
   EOF
