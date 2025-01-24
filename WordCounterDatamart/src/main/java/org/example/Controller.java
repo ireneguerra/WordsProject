@@ -29,8 +29,8 @@ public class Controller {
         S3Service s3Service = new S3Service(s3Client);
 
         String bucketName = "bucket-datalake-books";
-        String sourceFolder = "libros_sin_procesar/";
-        String destinationFolder = "libros_procesados/";
+        String sourceFolder = "unprocessed_books/";
+        String destinationFolder = "processed_books/";
 
         List<S3Object> files = s3Service.listFiles(bucketName, sourceFolder);
 

@@ -255,10 +255,28 @@ resource "aws_instance" "orchestrator_and_api_instance" {
     sudo yum update -y
     sudo yum install -y java-11-amazon-corretto aws-cli cronie
 
+    # Crear el script de orquestación
     cat <<'EOT' > /home/ec2-user/orchestrate_and_api.sh
     #!/bin/bash
     BUCKET_JARS="jars-app-bucket"
 
+    # Función para verificar si un puerto está en uso y detener el proceso correspondiente
+    stop_port_if_in_use() {
+      local port=$1
+      local pid=$(sudo lsof -t -i:$port)
+      if [ ! -z "$pid" ]; then
+        echo "El puerto $port está en uso por el proceso con PID $pid. Deteniendo..."
+        sudo kill -9 $pid
+        echo "Proceso detenido en el puerto $port."
+      else
+        echo "El puerto $port está libre."
+      fi
+    }
+
+    # Verificar y detener servicios en puertos clave (por ejemplo, 8080 para la API)
+    stop_port_if_in_use 8080
+
+    # Función para verificar si un archivo existe en S3
     check_file_in_s3() {
       local file=$1
       aws s3 ls "s3://$BUCKET_JARS/$file" > /dev/null 2>&1
@@ -271,6 +289,7 @@ resource "aws_instance" "orchestrator_and_api_instance" {
       fi
     }
 
+    # Función para descargar y ejecutar un archivo JAR
     process_file() {
       local file=$1
       while ! check_file_in_s3 "$file"; do
@@ -282,13 +301,16 @@ resource "aws_instance" "orchestrator_and_api_instance" {
       java -jar "$file" || exit 1
     }
 
-    # Ejecutar jar's
+    # Descargar y ejecutar los JARs necesarios
     process_file "BookCrawler.jar"
     process_file "WordCounterDatamart.jar"
     process_file "WordsGraph.jar"
 
     # Manejo del APIGraph.jar
     process_file "APIGraph.jar"
+
+    # Verificar nuevamente el puerto 8080 y asegurarse de que no haya conflictos antes de iniciar la API
+    stop_port_if_in_use 8080
 
     echo "Iniciando API..."
     nohup java -jar APIGraph.jar > /home/ec2-user/apigraph.log 2>&1 &
@@ -299,8 +321,7 @@ resource "aws_instance" "orchestrator_and_api_instance" {
     # Ejecutar el script inmediatamente
     bash /home/ec2-user/orchestrate_and_api.sh >> /home/ec2-user/orchestrator_and_api.log 2>&1
 
-    # Configurar cron cada 2 horas
-    echo "0 */2 * * * ec2-user bash /home/ec2-user/orchestrate_and_api.sh >> /home/ec2-user/orchestrator_and_api.log 2>&1" | sudo tee /etc/cron.d/orchestrate_and_api
+    echo "0 2 * * * ec2-user bash /home/ec2-user/orchestrate_and_api.sh >> /home/ec2-user/orchestrator_and_api.log 2>&1" | sudo tee /etc/cron.d/orchestrate_and_api
     sudo systemctl start crond
     sudo systemctl enable crond
   EOF
@@ -309,6 +330,7 @@ resource "aws_instance" "orchestrator_and_api_instance" {
     Name = "Orchestrator-And-API-EC2"
   }
 }
+
 
 ############################################
 # CREAR BUCKET S3 + SUBIR ip_mongo.txt
