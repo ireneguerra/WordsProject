@@ -20,8 +20,8 @@ public class S3DatalakeFeeder implements DatalakeFeeder {
 
     private final S3Client s3;
     private static final String BUCKET_NAME = "bucket-datalake-books";
-    private static final String PROCESSED_FOLDER = "libros_procesados/";
-    private static final String UNPROCESSED_FOLDER = "libros_sin_procesar/";
+    private static final String PROCESSED_FOLDER = "processed_books/";
+    private static final String UNPROCESSED_FOLDER = "unprocessed_books/";
 
     public S3DatalakeFeeder() {
         this.s3 = S3Client.builder()
